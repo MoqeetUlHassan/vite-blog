@@ -6,7 +6,7 @@ import App from './App';
 
 const root = ReactDOM.createRoot(document.getElementById('root')); // Create a root using createRoot
 root.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
+  <Router>
+  <Route path="/" component={App} />
+</Router>
 );

@@ -1,9 +1,19 @@
 import React from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link ,useNavigate} from 'react-router-dom'
 
-const PostPage = ({ posts, handleDelete }) => {
+const PostPage = ({ posts ,handlePost}) => {
     const { id } = useParams();
     const post = posts.find(post => (post.id).toString() === id);
+    const navigate = useNavigate();
+
+    const handleDelete =(id) =>{
+        const postsList = posts.filter(post => post.id !== id)
+        handlePost(postsList);
+        navigate('/');
+    
+      }
+    
+
     return (
 
         <main className='PostPage'>

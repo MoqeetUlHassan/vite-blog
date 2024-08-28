@@ -14,34 +14,44 @@ import Users from './Users'
 import Comments from './Comments'
 
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route , useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route  } from 'react-router-dom';
 
 function App() {
   const [search, setSearch] = useState('');
-  const [posts, setPosts] = useState([{ 
-    id:1,
-    title:"1 post",
-    datetime:"july 10",
-    body:"smafkdl;mask fcasf dfsad"
-  },
-{ id:2,
-  title:"2 post",
-  datetime:"july 11",
-  body:"smafkdl;mask  21431 31 fdsagf rah graew ghfcasf dfsad"
-}
+  const [posts, setPosts] = useState([
+    {
+      id: 1,
+      title: "My First Post",
+      datetime: "July 01, 2021 11:17:36 AM",
+      body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis consequatur expedita, assumenda similique non optio! Modi nesciunt excepturi corrupti atque blanditiis quo nobis, non optio quae possimus illum exercitationem ipsa!"
+    },
+    {
+      id: 2,
+      title: "My 2nd Post",
+      datetime: "July 01, 2021 11:17:36 AM",
+      body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis consequatur expedita, assumenda similique non optio! Modi nesciunt excepturi corrupti atque blanditiis quo nobis, non optio quae possimus illum exercitationem ipsa!"
+    },
+    {
+      id: 3,
+      title: "My 3rd Post",
+      datetime: "July 01, 2021 11:17:36 AM",
+      body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis consequatur expedita, assumenda similique non optio! Modi nesciunt excepturi corrupti atque blanditiis quo nobis, non optio quae possimus illum exercitationem ipsa!"
+    },
+    {
+      id: 4,
+      title: "My Fourth Post",
+      datetime: "July 01, 2021 11:17:36 AM",
+      body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis consequatur expedita, assumenda similique non optio! Modi nesciunt excepturi corrupti atque blanditiis quo nobis, non optio quae possimus illum exercitationem ipsa!"
+    }
 ]);
-
-  const [searchResults, setSearchResults] = useState([]);
-  // const navigate = useNavigate();
-  const handleDelete =(id) =>{
-    const postsList = posts.filter(post => post.id !== id)
-    setPosts(postsList);
-    // navigate('/');
-
+  const handlePost = (value) => {
+    setPosts(value);
   }
 
+  const [searchResults, setSearchResults] = useState([]);
 
   return (
+    
     <Router>
       <div className="App">
         <Header title='React JS blogs'/>
@@ -51,7 +61,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home posts={posts}/>} />
           <Route path="/post" element={<NewPost />} />
-          <Route path="/post/:id" element={<PostPage posts={posts} handleDelete={handleDelete} />} />
+          <Route path="/post/:id" element={<PostPage posts={posts} handlePost={handlePost} />} />
           <Route path="/posts" element={<Posts />} />
           <Route path="/users" element={<Users />} />
           <Route path="/comments" element={<Comments />} />
