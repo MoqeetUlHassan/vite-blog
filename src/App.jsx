@@ -11,38 +11,14 @@ import Missing from './Missing'
 import Posts from './Posts'
 import Users from './Users'
 import Comments from './Comments'
+import api from './api/posts'
 
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
   const [search, setSearch] = useState('');
-  const [posts, setPosts] = useState([
-    {
-      id: 1,
-      title: "My First Post",
-      datetime: "July 01, 2021 11:17:36 AM",
-      body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis consequatur expedita, assumenda similique non optio! Modi nesciunt excepturi corrupti atque blanditiis quo nobis, non optio quae possimus illum exercitationem ipsa!"
-    },
-    {
-      id: 2,
-      title: "My 2nd Post",
-      datetime: "July 01, 2021 11:17:36 AM",
-      body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis consequatur expedita, assumenda similique non optio! Modi nesciunt excepturi corrupti atque blanditiis quo nobis, non optio quae possimus illum exercitationem ipsa!"
-    },
-    {
-      id: 3,
-      title: "My 3rd Post",
-      datetime: "July 01, 2021 11:17:36 AM",
-      body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis consequatur expedita, assumenda similique non optio! Modi nesciunt excepturi corrupti atque blanditiis quo nobis, non optio quae possimus illum exercitationem ipsa!"
-    },
-    {
-      id: 4,
-      title: "My Fourth Post",
-      datetime: "July 01, 2021 11:17:36 AM",
-      body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis consequatur expedita, assumenda similique non optio! Modi nesciunt excepturi corrupti atque blanditiis quo nobis, non optio quae possimus illum exercitationem ipsa!"
-    }
-  ]);
+  const [posts, setPosts] = useState([]);
   const handlePost = (value) => {
     setPosts(value);
   }
@@ -52,44 +28,60 @@ function App() {
   const [postBody, setPostBody] = useState([]);
 
   useEffect(() => {
-    const filteredResults = posts.filter(post => 
-      ((post.body).toLowerCase()).includes(search.toLowerCase())
-      || ((post.title).toLowerCase()).includes(search.toLowerCase())
-    );
-    setSearchResults(filteredResults.reverse());
-  },[posts,search])
+    const fetchPosts = async () => {
+      try {
+        const response = await api.get('/posts');
+        if (response && response.data) {
+          setPosts(response.data);
+        }
+      }
+      catch (err) {
+        if (err.response) { console.log(err); }  
+      else {  console.log(`Error: ${err.message}`);}
+    }
+  }
+  fetchPosts();
+  }, [])
 
-  return (
-
-    <Router>
-      <div className="App">
-        <Header title='React JS blogs' />
-        <Nav search={search} setSearch={setSearch} />
-
-
-        <Routes>
-          <Route path="/" element={<Home posts={searchResults} />} />
-          <Route path="/post" element={<NewPost
-            postTitle={postTitle}
-            postBody={postBody}
-            posts= {posts}
-            setPostTitle={setPostTitle}
-            setPostBody={setPostBody}
-            setPosts={setPosts}
-          />} />
-          <Route path="/post/:id" element={<PostPage posts={posts} handlePost={handlePost} />} />
-          <Route path="/posts" element={<Posts />} />
-          <Route path="/users" element={<Users />} />
-          <Route path="/comments" element={<Comments />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/thirdapis" element={<Thirdapis />} />
-          <Route path="*" element={<Missing />} />
-        </Routes>
-
-        <Footer />
-      </div>
-    </Router>
+useEffect(() => {
+  const filteredResults = posts.filter(post =>
+    ((post.body).toLowerCase()).includes(search.toLowerCase())
+    || ((post.title).toLowerCase()).includes(search.toLowerCase())
   );
+  setSearchResults(filteredResults.reverse());
+}, [posts, search])
+
+return (
+
+  <Router>
+    <div className="App">
+      <Header title='React JS blogs' />
+      <Nav search={search} setSearch={setSearch} />
+
+
+      <Routes>
+        <Route path="/" element={<Home posts={searchResults} />} />
+        <Route path="/post" element={<NewPost
+          postTitle={postTitle}
+          postBody={postBody}
+          posts={posts}
+          setPostTitle={setPostTitle}
+          setPostBody={setPostBody}
+          setPosts={setPosts}
+        />} />
+        <Route path="/post/:id" element={<PostPage posts={posts} handlePost={handlePost} />} />
+        <Route path="/posts" element={<Posts />} />
+        <Route path="/users" element={<Users />} />
+        <Route path="/comments" element={<Comments />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/thirdapis" element={<Thirdapis />} />
+        <Route path="*" element={<Missing />} />
+      </Routes>
+
+      <Footer />
+    </div>
+  </Router>
+);
 }
 
 export default App;
