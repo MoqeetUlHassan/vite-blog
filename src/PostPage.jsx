@@ -1,18 +1,24 @@
 import React from 'react'
-import { useParams, Link ,useNavigate} from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
+import api from './api/posts'
 
-const PostPage = ({ posts ,handlePost}) => {
+const PostPage = ({ posts, handlePost }) => {
     const { id } = useParams();
     const post = posts.find(post => (post.id).toString() === id);
     const navigate = useNavigate();
 
-    const handleDelete =(id) =>{
-        const postsList = posts.filter(post => post.id !== id)
-        handlePost(postsList);
-        navigate('/');
-    
-      }
-    
+    const handleDelete = async (id) => {
+        try {
+            await api.delete(`/posts/${id}`);
+            const postsList = posts.filter(post => post.id !== id)
+            handlePost(postsList);
+            navigate('/');
+        }
+        catch (err) {
+            console.log(`Error: ${err.message}`)
+        }
+    }
+
 
     return (
 
@@ -28,15 +34,15 @@ const PostPage = ({ posts ,handlePost}) => {
                         </button>
                     </>
                 }
-                {!post && 
+                {!post &&
                     <>
-                    <h2>Post not found</h2>
-                    <p> sorry brother </p>
-                    <p>
-                        <Link to='/'>Visit Our Homepage</Link>
-                    </p>
+                        <h2>Post not found</h2>
+                        <p> sorry brother </p>
+                        <p>
+                            <Link to='/'>Visit Our Homepage</Link>
+                        </p>
                     </>
-                    
+
                 }
             </article>
         </main>
