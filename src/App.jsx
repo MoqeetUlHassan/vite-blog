@@ -6,6 +6,7 @@ import Home from './Home'
 import NewPost from './NewPost'
 import PostPage from './PostPage'
 import About from './About'
+import EditPost from './EditPost'
 import Thirdapis from './Thirdapis'
 import Missing from './Missing'
 import Posts from './Posts'
@@ -26,6 +27,10 @@ function App() {
   const [searchResults, setSearchResults] = useState([]);
   const [postTitle, setPostTitle] = useState([]);
   const [postBody, setPostBody] = useState([]);
+  
+  const [editTitle, setEditTitle] = useState('');
+  const [editBody, setEditBody] = useState('');
+
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -67,6 +72,14 @@ return (
           posts={posts}
           setPostTitle={setPostTitle}
           setPostBody={setPostBody}
+          setPosts={setPosts}
+        />} />
+          <Route path="/edit/:id" element={<EditPost
+          posts={posts}
+          editTitle={editTitle}
+          editBody={editBody}
+          setEditTitle={setEditTitle}
+          setEditBody={setEditBody}
           setPosts={setPosts}
         />} />
         <Route path="/post/:id" element={<PostPage posts={posts} handlePost={handlePost} />} />
