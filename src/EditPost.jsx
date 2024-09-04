@@ -1,6 +1,7 @@
 import React from 'react'
 import { useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
+import { format } from 'date-fns';
 import api from './api/posts'
 
 const EditPost = ({ posts, editBody, setEditBody, editTitle, setEditTitle, setPosts }) => {
