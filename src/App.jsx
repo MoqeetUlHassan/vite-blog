@@ -13,6 +13,8 @@ import Posts from './Posts'
 import Users from './Users'
 import Comments from './Comments'
 import api from './api/posts'
+import useWindowSize from './hooks/useWindowsSize'
+import useAxiosFetch from './hooks/useAxiosFetch'
 
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -30,23 +32,29 @@ function App() {
   
   const [editTitle, setEditTitle] = useState('');
   const [editBody, setEditBody] = useState('');
+  const {width } = useWindowSize();
 
+  const {data,fetchError,isLoading} = useAxiosFetch('http://localhost:3500/posts');
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await api.get('/posts');
-        if (response && response.data) {
-          setPosts(response.data);
-        }
-      }
-      catch (err) {
-        if (err.response) { console.log(err); }  
-      else {  console.log(`Error: ${err.message}`);}
-    }
-  }
-  fetchPosts();
-  }, [])
+    setPosts(data);
+  },[data]);
+
+  // useEffect(() => {
+  //   const fetchPosts = async () => {
+  //     try {
+  //       const response = await api.get('/posts');
+  //       if (response && response.data) {
+  //         setPosts(response.data);
+  //       }
+  //     }
+  //     catch (err) {
+  //       if (err.response) { console.log(err); }  
+  //     else {  console.log(`Error: ${err.message}`);}
+  //   }
+  // }
+  // fetchPosts();
+  // }, [])
 
 useEffect(() => {
   const filteredResults = posts.filter(post =>
@@ -60,12 +68,21 @@ return (
 
   <Router>
     <div className="App">
-      <Header title='React JS blogs' />
+      <Header title='React JS blogs' width={width} />
       <Nav search={search} setSearch={setSearch} />
 
 
       <Routes>
-        <Route path="/" element={<Home posts={searchResults} />} />
+        <Route path="/" element={
+          
+          <Home 
+          posts={searchResults} 
+          fetchError ={fetchError}
+          isLoading = {isLoading}
+          />
+          
+        } 
+          />
         <Route path="/post" element={<NewPost
           postTitle={postTitle}
           postBody={postBody}
