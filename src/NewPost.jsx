@@ -2,8 +2,15 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import api from './api/posts'
+import { useState, useContext } from 'react';
+import DataContext from './context/DataContext';
 
-const NewPost = ({ postTitle, postBody, posts, setPostTitle, setPostBody, setPosts }) => {
+const NewPost = () => {
+    const { posts, setPosts } = useContext(DataContext);
+
+    const [postTitle, setPostTitle] = useState([]);
+    const [postBody, setPostBody] = useState([]);
+
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -13,9 +20,9 @@ const NewPost = ({ postTitle, postBody, posts, setPostTitle, setPostBody, setPos
         const newPost = { id, title: postTitle, datetime, body: postBody };
 
         try {
-            const response = await api.post('/posts',newPost);
+            const response = await api.post('/posts', newPost);
             const allPosts = [...posts, response.data];
-            
+
             setPosts(allPosts);
             setPostTitle('');
             setPostBody('');

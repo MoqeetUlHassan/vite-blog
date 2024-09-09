@@ -1,10 +1,16 @@
 import React from 'react'
-import { useEffect } from 'react'
+import { useEffect, useContext, useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { format } from 'date-fns';
 import api from './api/posts'
+import DataContext from './context/DataContext';
 
-const EditPost = ({ posts, editBody, setEditBody, editTitle, setEditTitle, setPosts }) => {
+const EditPost = () => {
+
+    const { posts, setPosts } = useContext(DataContext);
+
+    const [editTitle, setEditTitle] = useState('');
+    const [editBody, setEditBody] = useState('');
     const { id } = useParams();
     const post = posts.find(post => (post.id).toString() === id);
     const navigate = useNavigate();
