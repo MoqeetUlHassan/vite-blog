@@ -12,33 +12,42 @@ import Missing from './Missing'
 import Posts from './Posts'
 import Users from './Users'
 import Comments from './Comments'
-
-import { DataProvider } from './context/DataContext'
-
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import useAxiosFetch from './hooks/useAxiosFetch'
+import { useEffect } from 'react'
+import { useStoreActions } from 'easy-peasy'
+import { BrowserRouter as Router, Routes, Route, useActionData } from 'react-router-dom';
 
 function App() {
+  const setPosts = useStoreActions((actions) => actions.setPosts);
+  const { data, fetchError, isLoading } = useAxiosFetch('http://localhost:3500/posts');
+
+  useEffect(() => {
+    setPosts(data);
+  }, [data, setPosts]);
 
   return (
 
     <Router>
       <div className="App">
         <Header title='React JS blogs' />
-        <DataProvider>
-          <Nav /> 
-          <Routes>
-            <Route path="/" Component={Home} />
-            <Route path="/post" Component={NewPost} />
-            <Route path="/edit/:id" Component={EditPost} />
-            <Route path="/post/:id" Component={PostPage} />
-            <Route path="/posts" element={<Posts />} />
-            <Route path="/users" element={<Users />} />
-            <Route path="/comments" element={<Comments />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/thirdapis" element={<Thirdapis />} />
-            <Route path="*" element={<Missing />} />
-          </Routes>
-        </DataProvider>
+        {/* <Nav /> */}
+        <Routes>
+          <Route path="/">
+            {/* <Home
+              isLoading={isLoading}
+              fetchError={fetchError}
+            /> */}
+          </Route>
+          {/* <Route path="/post" Component={NewPost} />
+          <Route path="/edit/:id" Component={EditPost} />
+          <Route path="/post/:id" Component={PostPage} /> */}
+          <Route path="/posts" element={<Posts />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/comments" element={<Comments />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/thirdapis" element={<Thirdapis />} />
+          <Route path="*" element={<Missing />} />
+        </Routes>
         <Footer />
 
       </div>

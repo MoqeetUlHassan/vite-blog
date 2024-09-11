@@ -1,15 +1,16 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
-import api from './api/posts'
-import { useState, useContext } from 'react';
-import DataContext from './context/DataContext';
+import { useStoreState, useStoreActions } from 'easy-peasy';
 
 const NewPost = () => {
-    const { posts, setPosts } = useContext(DataContext);
+    const posts = useStoreState((state) => state.posts);
+    const postTitle = useStoreState((state) => state.postTitle);
+    const postBody = useStoreState((state) => state.postBody);
 
-    const [postTitle, setPostTitle] = useState([]);
-    const [postBody, setPostBody] = useState([]);
+    const savePost = useStoreActions((actions) => actions.savePost);
+    const setPostTitle = useStoreActions((actions) => actions.setPostTitle);
+    const setPostBody = useStoreActions((actions) => actions.setPostBody);
 
     const navigate = useNavigate();
 
@@ -18,19 +19,10 @@ const NewPost = () => {
         const id = posts.length ? posts[posts.length - 1].id + 1 : 1;
         const datetime = format(new Date(), 'MMMM dd, yyyy pp');
         const newPost = { id, title: postTitle, datetime, body: postBody };
+        
+        savePost(newPost);
+        navigate('/');
 
-        try {
-            const response = await api.post('/posts', newPost);
-            const allPosts = [...posts, response.data];
-
-            setPosts(allPosts);
-            setPostTitle('');
-            setPostBody('');
-            navigate('/');
-        }
-        catch (err) {
-            console.log(`Error: ${err.message}`)
-        }
     };
 
     return (
