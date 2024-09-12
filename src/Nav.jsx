@@ -7,7 +7,7 @@ const Nav = () => {
 
   const posts = useStoreState((state) => state.posts);
   const search = useStoreState((state) => state.search);
-  const setSearch = useStoreState((state) => state.setSearch);
+  const setSearch = useStoreActions((state) => state.setSearch);
   const setSearchResults = useStoreActions((state) => state.setSearchResults);
 
   useEffect(() => {
