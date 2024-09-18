@@ -24,23 +24,23 @@ function App() {
   useEffect(() => {
     setPosts(data);
   }, [data, setPosts]);
-  console.log("S");
+
   return (
 
     <Router>
       <div className="App">
         <Header title='React JS blogs' />
-         <Nav /> 
+        <Nav />
         <Routes>
-          <Route path="/" element={<Home
+          <Route path="/">
+            <Home
               isLoading={isLoading}
               fetchError={fetchError}
-            />} />
-            
-          
-           <Route path="/post" Component={NewPost} />
+            />
+          </Route>
+          <Route path="/post" Component={NewPost} />
           <Route path="/edit/:id" Component={EditPost} />
-          <Route path="/post/:id" Component={PostPage} /> 
+          <Route path="/post/:id" Component={PostPage} />
           <Route path="/posts" element={<Posts />} />
           <Route path="/users" element={<Users />} />
           <Route path="/comments" element={<Comments />} />
